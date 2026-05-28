@@ -1,0 +1,2 @@
+Placeholder sound file for NeuroGuard app.
+Replace with actual audio files as needed.

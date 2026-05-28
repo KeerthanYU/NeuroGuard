@@ -1,0 +1,49 @@
+# NeuroGuard .gitignore
+
+# Flutter/Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+*.iml
+
+# Android
+android/.gradle/
+android/local.properties
+android/app/google-services.json
+**/android/gradle-wrapper.jar
+**/android/gradlew
+**/android/gradlew.bat
+**/android/key.properties
+*.jks
+*.keystore
+
+# iOS
+ios/Pods/
+ios/Flutter/.last_build_id
+ios/.symlinks/
+ios/Runner/GoogleService-Info.plist
+
+# Firebase sensitive
+lib/firebase_options.dart
+firebase/.firebaserc
+
+# Environment
+.env
+*.env.local
+
+# IDEs
+.idea/
+.vscode/settings.json
+*.swp
+*.lock
+!pubspec.lock
+
+# macOS
+.DS_Store
+
+# Logs
+*.log

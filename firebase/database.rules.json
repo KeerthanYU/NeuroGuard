@@ -1,0 +1,55 @@
+{
+  "rules": {
+    "telemetry": {
+      "$patientId": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        "ax": {
+          ".validate": "newData.isNumber()"
+        },
+        "ay": {
+          ".validate": "newData.isNumber()"
+        },
+        "az": {
+          ".validate": "newData.isNumber()"
+        },
+        "ir": {
+          ".validate": "newData.isNumber()"
+        },
+        "timestamp": {
+          ".validate": "newData.isNumber()"
+        }
+      }
+    },
+    "device": {
+      "$patientId": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        "lastSeen": {
+          ".validate": "newData.isNumber()"
+        },
+        "status": {
+          ".validate": "newData.isString()"
+        }
+      }
+    },
+    "alerts": {
+      "$patientId": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        "$alertId": {
+          ".validate": "newData.hasChildren(['time', 'severity', 'heartRate', 'motionLevel', 'patientId', 'eventType', 'resolved'])"
+        }
+      }
+    },
+    "caregivers": {
+      "$caregiverId": {
+        ".read": "auth != null && auth.uid == $caregiverId",
+        ".write": "auth != null && auth.uid == $caregiverId",
+        "fcmToken": {
+          ".validate": "newData.isString()"
+        }
+      }
+    }
+  }
+}
