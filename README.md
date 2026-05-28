@@ -22,8 +22,7 @@ NeuroGuard solves this utilizing Multi-Modal Sensor Fusion and Edge-AI. By proce
 ## 3. System Architecture & Circuit Diagram
 
 ### Circuit Diagram
-(Insert your schematic image here. e.g., Schematik.io export)
-![alt text](docs/circuit_diagram.png)
+![Circuit Diagram](docs/circuit_diagram.png)
 
 ### Hardware Stack
 - **Microcontroller**: ESP32 NodeMCU (Dual-core 240MHz, 520KB SRAM)
