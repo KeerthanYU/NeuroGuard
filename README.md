@@ -91,9 +91,8 @@ The localized detection algorithm is built on a custom 1D-Convolutional Neural N
 │   ├── lib/                     # Flutter/Dart UI and Firebase Listeners
 │   └── assets/                  # Audio files for emergency broadcasts
 ├── 3D_Models/
-│   ├── NeuroGuard_Base.stl      # Bottom chassis with sensor cutouts & strap lugs
-│   ├── NeuroGuard_Lid.stl       # Snap-fit top cover
-│   └── enclosure_source.scad    # Parametric OpenSCAD source code
+│   ├── NeuroGuard_Enclosure_Combined.stl # 3D Printable combined base and lid
+│   └── enclosure_source.scad             # Parametric OpenSCAD source code
 ├── Docs/
 │   ├── circuit_diagram.png      # Hardware schematic
 │   └── system_architecture.pdf  # High-level data flow diagrams
