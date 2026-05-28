@@ -1,0 +1,22 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Train Model",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/train_model.py",
+      "console": "integratedTerminal",
+      "args": ["--data-path", "data/processed/seizure_dataset.csv"],
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe"
+    },
+    {
+      "name": "Python: Convert Model",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/convert_model.py",
+      "console": "integratedTerminal",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe"
+    }
+  ]
+}

@@ -78,24 +78,53 @@ The localized detection algorithm is built on a custom 1D-Convolutional Neural N
 
 ## 7. Repository Structure
 ```text
-├── Firmware/
-│   ├── Seizure_ESP32/
-│   │   ├── Seizure_ESP32.ino    # Main C++ embedded firmware (Wi-Fi, I2C, Firebase)
-│   │   └── model.h              # Compiled C-byte array of the quantized TinyML model
-│   └── SIM800L_Diagnostics/     # UART debugging scripts for GSM initialization
-├── Machine_Learning/
-│   ├── dataset_generation.py    # Python scripts for synthetic & real data parsing
-│   └── train_1d_cnn.ipynb       # Jupyter notebook for TFLite model training
-├── App_Dashboard/               # Caregiver Mobile Application Source Code
-│   ├── lib/                     # Flutter/Dart UI and Firebase Listeners
-│   └── assets/                  # Audio files for emergency broadcasts
-├── 3D_Models/
-│   ├── NeuroGuard_Enclosure_Combined.stl # 3D Printable combined base and lid
-│   └── enclosure_source.scad             # Parametric OpenSCAD source code
-├── Docs/
-│   ├── circuit_diagram.png      # Hardware schematic
-│   └── system_architecture.pdf  # High-level data flow diagrams
-└── README.md
+├── 3D_Models/                       # 3D chassis and enclosure model files
+│   ├── NeuroGuard_Enclosure_Combined.stl # 3D printable combined base and lid
+│   └── enclosure_source.scad             # Parametric OpenSCAD design source
+├── ML_Model/                        # Machine Learning model training and processing pipeline
+│   └── Seizure_ML_Project/          # Core Python ML project directory
+│       ├── data/                    # Dataset storage
+│       │   └── processed/           # Processed synthetic & real patient CSV data
+│       ├── models/                  # Trained neural network and scaler models
+│       │   ├── scaler.save          # Saved data scaler
+│       │   ├── seizure_model.keras  # Trained 1D-CNN model (Keras format)
+│       │   └── seizure_quantized.tflite # 8-bit quantized TensorFlow Lite model
+│       ├── output/                  # Performance plots, testing stats, and ESP32 files
+│       │   ├── INPUT_SPECIFICATIONS.md  # On-device model input specifications
+│       │   └── model.h              # C-byte array header exported for ESP32 firmware
+│       ├── scripts/                 # Utility scripts for training and logging
+│       │   ├── convert_model.py     # Quantizes and converts Keras model to TFLite
+│       │   ├── data_generator.py    # Generates synthetic training datasets
+│       │   ├── generate_header.py   # Compiles quantized model to C-byte array header
+│       │   ├── load_real_dataset.py # Script to load and preprocess real PPG/tremor data
+│       │   ├── serial_logger.py     # Captures real-time sensor streams from ESP32 serial
+│       │   └── train_model.py       # Trains the 1D-CNN model
+│       ├── requirements.txt         # Python dependencies for the ML pipeline
+│       └── README.md                # ML pipeline documentation
+├── lib/                             # Core Flutter application source files (Companion App)
+│   ├── core/                        # Shared layouts, global themes, and helper utilities
+│   ├── data/                        # Local database schemas and storage handling
+│   ├── features/                    # Core modular feature implementations
+│   ├── models/                      # Flutter app data models
+│   ├── providers/                   # State management providers
+│   ├── screens/                     # UI screens (Caregiver dashboard, settings, etc.)
+│   ├── services/                    # Firebase connection and notification services
+│   └── main.dart                    # Application entry point
+├── assets/                          # Application static resources
+│   ├── animations/                  # Lottie/JSON animation files
+│   ├── fonts/                       # Specialized UI typography
+│   ├── images/                      # App icons, illustrations, and images
+│   └── sounds/                      # Alarm and notification sound assets
+├── firebase/                        # Firebase backend configurations
+│   └── database.rules.json          # Security rules for Realtime Database
+├── android/                         # Flutter Android native project structure
+├── ios/                             # Flutter iOS native project structure
+├── web/                             # Flutter Web platform deployment files
+├── windows/                         # Flutter Windows desktop application files
+├── macos/                           # Flutter macOS desktop application files
+├── linux/                           # Flutter Linux desktop application files
+├── pubspec.yaml                     # Flutter application dependencies configuration
+└── README.md                        # Main project documentation
 ```
 
 ## 8. Installation & Setup
