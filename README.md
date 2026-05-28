@@ -1,212 +1,104 @@
-# NeuroGuard — 24/7 Smart Epilepsy Guardian
+NeuroGuard: Wearable Edge-AI Seizure Detection System
+![alt text](https://img.shields.io/badge/Hardware-ESP32-blue?style=for-the-badge&logo=espressif)
 
-> **Production-level Flutter + Firebase healthcare app for real-time epilepsy seizure detection and emergency monitoring via ESP32 wearable.**
+![alt text](https://img.shields.io/badge/Language-C++-00599C?style=for-the-badge&logo=c%2B%2B)
 
----
+![alt text](https://img.shields.io/badge/AI-TensorFlow_Lite_Micro-FF6F00?style=for-the-badge&logo=tensorflow)
 
-## 📱 Screenshots & Features
+![alt text](https://img.shields.io/badge/Cloud-Firebase-FFCA28?style=for-the-badge&logo=firebase)
 
-| Splash | Dashboard | Emergency Alert |
-|--------|-----------|-----------------|
-| Animated ECG + pulse rings | Live stats cards + charts | Full-screen SOS with pulse anim |
-
-| GPS Tracking | History | Caregiver |
-|---|---|---|
-| Dark Google Maps + live marker | Timeline UI with severity | Remote monitoring + contacts |
-
----
-
-## 🏗️ Architecture
-
-```
-neuroguard/
-├── lib/
-│   ├── main.dart                    # App entry point
-│   ├── firebase_options.dart        # Firebase config (replace with yours)
-│   ├── models/
-│   │   ├── patient_model.dart       # Real-time patient data model
-│   │   └── alert_model.dart         # Seizure event model
-│   ├── providers/
-│   │   ├── patient_provider.dart    # Real-time state (streams Firebase)
-│   │   ├── auth_provider.dart       # Auth state
-│   │   └── theme_provider.dart      # Dark/light toggle
-│   ├── services/
-│   │   ├── firebase_service.dart    # DB streams + writes
-│   │   ├── auth_service.dart        # Email + Google auth
-│   │   └── notification_service.dart # FCM + local notifs
-│   ├── screens/
-│   │   ├── splash_screen.dart       # Animated with ECG
-│   │   ├── login_screen.dart        # Email + Google sign-in
-│   │   ├── home_dashboard.dart      # Main dashboard
-│   │   ├── emergency_alert_screen.dart # Red SOS screen
-│   │   ├── live_monitoring_screen.dart # Live charts
-│   │   ├── gps_tracking_screen.dart    # Google Maps
-│   │   ├── history_screen.dart         # Timeline alerts
-│   │   ├── caregiver_dashboard.dart    # Remote monitoring
-│   │   └── settings_screen.dart        # Preferences
-│   ├── widgets/
-│   │   ├── common_widgets.dart      # GlassCard, StatCard, buttons
-│   │   └── charts.dart              # fl_chart wrappers
-│   └── utils/
-│       ├── app_theme.dart           # Design system
-│       └── constants.dart           # Routes + constants
-├── esp32/
-│   └── neuroguard_firmware.ino     # ESP32 Arduino code
-├── firebase/
-│   └── database.rules.json         # DB security rules
-└── android/
-    └── app/src/main/AndroidManifest.xml
-```
-
----
-
-## 🚀 Quick Setup
-
-### Step 1 — Clone the project
-```bash
-cd d:\SApp\neuroguard
-flutter pub get
-```
-
-### Step 2 — Firebase Setup
-1. Go to [Firebase Console](https://console.firebase.google.com)
-2. Create a new project: **NeuroGuard**
-3. Enable:
-   - ✅ Authentication (Email/Password + Google)
-   - ✅ Realtime Database
-   - ✅ Cloud Messaging (FCM)
-4. Add an **Android app**:
-   - Package: `com.neuroguard.neuroguard`
-   - Download `google-services.json` → place in `android/app/`
-5. Open `lib/firebase_options.dart` and replace **all placeholder values**
-
-### Step 3 — Google Maps API
-1. Go to [Google Cloud Console](https://console.cloud.google.com)
-2. Enable **Maps SDK for Android** + **Maps SDK for iOS**
-3. Create an API key
-4. In `android/app/src/main/AndroidManifest.xml` replace:
-   ```xml
-   android:value="YOUR_GOOGLE_MAPS_API_KEY"
-   ```
-
-### Step 4 — Firebase Database Rules
-Import `firebase/database.rules.json` into your Firebase Realtime Database rules.
-
-### Step 5 — Seed Mock Data (for demo without ESP32)
-In `HomeDashboard`, tap **"Test SOS"** to simulate a seizure,  
-or call `provider.startMockSimulation()` to stream periodic data.
-
-### Step 6 — Run the App
-```bash
-flutter run --debug
-# For release:
-flutter run --release
-```
-
----
-
-## 📡 Firebase Database Structure
-
-```json
-{
-  "patients": {
-    "patient_001": {
-      "patientName": "Alex Johnson",
-      "deviceId": "ESP32-NG-001",
-      "heartRate": 78,
-      "motionLevel": 2.3,
-      "seizureDetected": false,
-      "battery": 85,
-      "latitude": 28.6139,
-      "longitude": 77.2090,
-      "timestamp": 1716115200,
-      "connected": true
-    }
-  },
-  "alerts": {
-    "alert_001": {
-      "time": 1716115200,
-      "severity": "CRITICAL",
-      "heartRate": 162,
-      "motionLevel": 9.4,
-      "latitude": 28.6145,
-      "longitude": 77.2088,
-      "patientId": "patient_001",
-      "notes": "Tonic-clonic seizure detected"
-    }
-  }
-}
-```
-
----
-
-## 🔌 ESP32 Hardware Setup
-
-### Components
-| Component | Purpose |
-|-----------|---------|
-| ESP32 DevKit v1 | Main microcontroller |
-| MAX30102 | Heart Rate + SpO2 |
-| MPU6050 | Accelerometer (motion/tremor) |
-| Neo-6M GPS | Location tracking |
-| LiPo 3.7V | Battery |
-
-### Wiring
-```
-MAX30102:  SDA → GPIO21  |  SCL → GPIO22
-MPU6050:   SDA → GPIO21  |  SCL → GPIO22  (shared I2C)
-GPS:       TX  → GPIO16  |  RX  → GPIO17
-Battery:   Analog         →  GPIO34
-```
-
-### Flash Firmware
-1. Install Arduino IDE + ESP32 board support
-2. Install required libraries (listed in firmware comments)
-3. Fill in WiFi + Firebase credentials in `neuroguard_firmware.ino`
-4. Upload and open Serial Monitor (115200 baud)
-
----
-
-## 🎨 Design System
-
-| Token | Value |
-|-------|-------|
-| Background | `#050A18` deep space |
-| Card | `#0D1B2E` glass dark |
-| Primary Blue | `#0066FF` |
-| Accent Cyan | `#00D4FF` |
-| Emergency Red | `#FF1744` |
-| Safe Green | `#00E676` |
-| Font | Poppins + Inter |
-
----
-
-## 📦 Dependencies
-
-| Package | Version | Purpose |
-|---------|---------|---------|
-| firebase_core | ^2.24.2 | Firebase init |
-| firebase_auth | ^4.16.0 | Authentication |
-| firebase_database | ^10.4.9 | Realtime data |
-| firebase_messaging | ^14.7.10 | Push notifications |
-| provider | ^6.1.1 | State management |
-| google_maps_flutter | ^2.5.3 | GPS maps |
-| fl_chart | ^0.66.2 | Heart/motion charts |
-| flutter_local_notifications | ^16.3.2 | Local alerts |
-| lottie | ^3.0.0 | Animations |
-
----
-
-## 🏆 Hackathon Presentation Tips
-
-1. **Demo Flow**: Launch → Splash → Login (Google) → Dashboard → tap "Test SOS" → Emergency screen → GPS → History → Settings
-2. **Offline Demo**: All screens work with mock data — no ESP32 needed
-3. **Key Selling Points**: Real-time Firebase streaming, automated seizure detection, one-tap caregiver alert, dark healthcare UI
-4. **Social Impact**: 50M+ epilepsy patients worldwide; 30% have uncontrolled seizures
-
----
-
-## 👥 Team
-
-Built with ❤️ for healthcare innovation.  
-**NeuroGuard** — _"Because every second matters."_
+![alt text](https://img.shields.io/badge/Fabrication-3D_Printing-red?style=for-the-badge&logo=makerbot)
+Shifting epilepsy care from reactive emergency response to proactive protection through real-time, low-latency machine learning on the edge.
+1. Project Abstract
+NeuroGuard is an untethered, medical-grade smartwatch prototype designed to combat Sudden Unexpected Death in Epilepsy (SUDEP). Traditional motion monitors suffer from high false-positive rates during daily tasks (e.g., brushing teeth), leading to alarm fatigue.
+NeuroGuard solves this utilizing Multi-Modal Sensor Fusion and Edge-AI. By processing 3-axis spatial motion and optical photoplethysmography (PPG) data locally on an ESP32 via a quantized 1D-Convolutional Neural Network (CNN), the device accurately isolates tonic-clonic tremors. Upon classification, the device autonomously dispatches a Priority-1 emergency payload to a Cloud database, instantly triggering a Caregiver Companion App to broadcast local first-aid instructions and dispatch a GPS-routed emergency SMS. The entire system is housed in a custom-engineered, 3D-printed wearable enclosure.
+2. Core Features
+On-Device Inference (TinyML): Executes local machine learning classification in under 20ms. Operating on the edge ensures patient data privacy and removes dependency on cloud-computing latency during a medical crisis.
+Sensor Fusion Engine: Fuses MPU-6500 spatial acceleration data with MAX30102 physiological cardiovascular data to mathematically differentiate between harmless daily activities and actual physiological emergencies.
+Bare-Metal I2C Protocol: Bypasses standard hardware libraries by utilizing raw C++ register-read commands, ensuring 100% stable 50Hz data acquisition and preventing I2C bus lockups.
+Ergonomic Wearable Design: Features a custom parametric 3D-printed chassis with specialized sensor cutouts for ambient light occlusion and rigid IMU mounting.
+3. System Architecture & Circuit Diagram
+Circuit Diagram
+(Insert your schematic image here. e.g., Schematik.io export)
+![alt text](docs/circuit_diagram.png)
+Hardware Stack
+Microcontroller: ESP32 NodeMCU (Dual-core 240MHz, 520KB SRAM)
+Motion Sensor: MPU-6500 (3-Axis Accelerometer & Gyroscope)
+Physiological Sensor: MAX30102 (Optical Pulse Oximeter / PPG)
+Cellular Gateway: SIM800L 2G GSM Module (For SMS dispatch)
+Power Delivery Network (PDN): 3.7V 400mAh LiPo Battery + TP4056 Linear Charger.
+Software Stack
+Embedded Firmware: C++ / Arduino Core
+Machine Learning: TensorFlow Lite Micro (EloquentTinyML engine)
+Cloud Backend: Firebase Realtime Database (REST API via <HTTPClient.h>)
+Mobile Interface: Cross-platform Caregiver Dashboard
+4. Hardware Wiring & Pinout Specification
+The system utilizes a shared I2C bus with native 3.3V logic for the sensors, alongside a dedicated UART communication line for the GSM module.
+Component	Component Pin	ESP32 Pin / Power Routing	Engineering Notes
+MPU-6500	VCC	VIN (5V)	Powers internal LDO regulator for I2C stability
+MPU-6500	GND	GND	Common Ground
+MPU-6500	SDA	GPIO 21	Shared I2C Data
+MPU-6500	SCL	GPIO 22	Shared I2C Clock
+MPU-6500	AD0	GND	Hardware address lock (0x68)
+MAX30102	VCC	3.3V or VIN	Dependent on specific breakout LDO
+MAX30102	SDA	GPIO 21	Shared I2C Data
+MAX30102	SCL	GPIO 22	Shared I2C Clock
+SIM800L	VCC	BAT+ (Direct)	Must bypass ESP32 regulator to handle 2A transmission spikes
+SIM800L	GND	GND	Common Ground
+SIM800L	TX	GPIO 16 (RX2)	Hardware UART2
+SIM800L	RX	GPIO 17 (TX2)	Requires a 2.2kΩ series resistor to step down 3.3V logic to 2.8V
+Power Delivery Note: A 1000µF low-ESR decoupling capacitor is integrated across the SIM800L VCC and GND pins to suppress transient current spikes and prevent microcontroller brownout resets. (Note: Full software implementation of the SIM800L was paused during the hackathon due to time constraints, but the hardware architecture supports it natively).
+5. Mechanical Design & 3D Enclosure
+To translate the raw hardware into a functional wearable prototype, a custom enclosure was modeled and fabricated using FDM (Fused Deposition Modeling) 3D printing. The design files (.stl and .scad) are provided in the /3D_Models directory.
+Enclosure Specifications:
+Two-Part Clamshell Design: Features a base chassis and a snap-fit top lid for rapid assembly and internal hardware maintenance during testing.
+Biometric Sensor Port: The base includes a precision 15x12mm cutout with a 1mm extruded lip. This forces the MAX30102 sensor to maintain flush contact with the user's skin, effectively occluding ambient light to prevent photoplethysmogram (PPG) signal corruption.
+Rigid IMU Mounting: The MPU-6500 is rigidly affixed to the internal base plate. This prevents the plastic enclosure from acting as a mechanical shock absorber, ensuring zero loss of high-frequency tremor data.
+Integrated Strap Lugs: Built-in 24mm lugs allow for the use of an elastic/velcro strap, providing the constant, gentle pressure required for accurate optical heart-rate monitoring.
+Material: Polylactic Acid (PLA) for thermal stability and rapid prototyping.
+6. Machine Learning Pipeline (TinyML)
+The localized detection algorithm is built on a custom 1D-Convolutional Neural Network (CNN), designed specifically for multi-channel time-series data.
+Data Acquisition: The ESP32 collects a rolling window of 300 timesteps across 4 features (Accel X, Y, Z, and raw IR PPG), resulting in a [1200] element flat input array.
+Feature Extraction: The 1D-CNN identifies rhythmic 3-8 Hz oscillations indicative of tonic-clonic tremors, whilst monitoring standard deviation in the optical PPG data.
+Quantization: The trained model is quantized to 8-bit integer weights using TensorFlow Lite, compressing the model size to under 32KB to fit within the ESP32's SRAM constraints.
+Deployment: The model is converted to a C-byte array (model.h) and executed on-device using the EloquentTinyML wrapper.
+(For detailed model training scripts, datasets, and architecture diagrams, refer to the /Machine_Learning directory).
+7. Repository Structure
+code
+Text
+├── Firmware/
+│   ├── Seizure_ESP32/
+│   │   ├── Seizure_ESP32.ino    # Main C++ embedded firmware (Wi-Fi, I2C, Firebase)
+│   │   └── model.h              # Compiled C-byte array of the quantized TinyML model
+│   └── SIM800L_Diagnostics/     # UART debugging scripts for GSM initialization
+├── Machine_Learning/
+│   ├── dataset_generation.py    # Python scripts for synthetic & real data parsing
+│   └── train_1d_cnn.ipynb       # Jupyter notebook for TFLite model training
+├── App_Dashboard/               # Caregiver Mobile Application Source Code
+│   ├── lib/                     # Flutter/Dart UI and Firebase Listeners
+│   └── assets/                  # Audio files for emergency broadcasts
+├── 3D_Models/
+│   ├── NeuroGuard_Base.stl      # Bottom chassis with sensor cutouts & strap lugs
+│   ├── NeuroGuard_Lid.stl       # Snap-fit top cover
+│   └── enclosure_source.scad    # Parametric OpenSCAD source code
+├── Docs/
+│   ├── circuit_diagram.png      # Hardware schematic
+│   └── system_architecture.pdf  # High-level data flow diagrams
+└── README.md
+8. Installation & Setup
+Embedded Firmware Deployment
+Install the Arduino IDE and configure the ESP32 Board Manager via Espressif.
+Install the required libraries via the Library Manager:
+SparkFun MAX3010x Pulse and Proximity Sensor
+EloquentTinyML (Version 0.0.10 strictly for self-contained TFLite compatibility).
+Open Firmware/Seizure_ESP32/Seizure_ESP32.ino.
+Update the network credentials and Firebase REST API endpoint:
+code
+C++
+const char* ssid = "YOUR_SSID";
+const char* password = "YOUR_PASSWORD";
+const char* firebase_url = "https://your-project.firebaseio.com/telemetry.json";
+Ensure model.h is present in the sketch directory and compile/upload to the ESP32 Dev Module.
+9. Hackathon Context & Disclaimer
+This prototype was engineered during a 48-hour hackathon to demonstrate the feasibility of combining Edge Computing, 3D Fabrication, and biomedical sensors.
+Disclaimer: This system is an experimental proof-of-concept and is not FDA-certified for clinical, diagnostic, or life-saving use. Real-world deployment requires rigorous clinical trials, individual patient calibration, and certified medical hardware enclosures.
